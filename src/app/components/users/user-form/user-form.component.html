@@ -1,0 +1,58 @@
+<div class="container mt-4">
+  <h2>{{ isEdit ? "Editar Usuario" : "Crear Usuario" }}</h2>
+
+  <form (ngSubmit)="saveUser()">
+    <div class="mb-3">
+      <label for="dni" class="form-label">DNI</label>
+      <input
+        type="text"
+        id="dni"
+        class="form-control"
+        [(ngModel)]="user.dni"
+        name="dni"
+        required
+      />
+    </div>
+
+    <div class="mb-3">
+      <label for="name" class="form-label">Nombre</label>
+      <input
+        type="text"
+        id="name"
+        class="form-control"
+        [(ngModel)]="user.name"
+        name="name"
+        required
+      />
+    </div>
+
+    <div class="mb-3">
+      <label for="surname" class="form-label">Apellido</label>
+      <input
+        type="text"
+        id="surname"
+        class="form-control"
+        [(ngModel)]="user.surname"
+        name="surname"
+        required
+      />
+    </div>
+
+    <div class="mb-3">
+      <label for="course" class="form-label">Curso</label>
+      <input
+        type="text"
+        id="course"
+        class="form-control"
+        [(ngModel)]="user.course"
+        name="course"
+        required
+      />
+    </div>
+
+    <button type="submit" class="btn btn-primary">
+      {{ isEdit ? "Actualizar" : "Guardar" }}
+    </button>
+    <a routerLink="/users" class="btn btn-secondary ms-2">Cancelar</a>
+  </form>
+</div>

@@ -1,0 +1,188 @@
+.container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* 3 columnas */
+    grid-template-rows: repeat(2, 1fr); /* 2 filas */
+    gap: 20px; /* Espacio entre los elementos */
+    margin-top: 50px;
+  }
+
+  .cart-container{
+    margin-top: 20px;
+    border-top: 2px solid #000;
+    padding-top: 20px;
+  }
+  
+  .item-produc {
+    border: 1px solid #ccc;
+    border-radius: 25px; 
+    padding: 10px;
+    text-align: center;
+    box-shadow: 0px 6px 6px rgba(0, 0, 0, 0.2);
+
+  }
+
+  .productos{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 25px;
+    cursor: pointer;
+  }
+  
+  .imagenesLeches {
+    max-width: 25%;
+    height: auto;
+  }
+  
+  .data {
+    margin-top: 10px;
+  }
+
+  .botones-conf{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 25px;
+    margin-bottom: 25px;
+    gap: 20px;
+
+}
+
+/* styles.css */
+
+  
+  .item {
+    margin: 10px;
+    border: 1px solid #ccc;
+    padding: 10px;
+    width: 200px;
+  }
+  
+  .cart-container {
+    margin-top: 20px;
+    border-top: 2px solid #000;
+    padding-top: 20px;
+    display: flex;
+    gap: 20px;
+
+  }
+  
+  .cart-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    padding: 20px 20px 20px 20px;
+  }
+  
+  .cart-item-image {
+    width: 50px;
+    height: 50px;
+    margin-right: 10px;
+  }
+  
+  .cart-item-details {
+    flex-grow: 1;
+  }
+
+  button {
+    padding: 5px 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: #007bff;
+    color: white;
+    transition: background-color 0.3s;
+    margin-left: 10px;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+/* Contenedor principal */
+.user-container {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 1000;
+  max-width: 320px;
+  background-color: #ffffff;
+  padding: 14px 18px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+/* Efecto hover para resaltar el contenedor */
+.user-container:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+}
+
+/* Estilo del logo */
+.user-logo {
+  width: 55px;
+  height: 55px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #ddd;
+  transition: transform 0.2s ease-in-out;
+}
+
+/* Efecto hover en el logo */
+.user-logo:hover {
+  transform: scale(1.1);
+}
+
+/* Contenedor de la información */
+.info-data {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-family: Arial, sans-serif;
+}
+
+/* Estilo de los textos */
+.info-data p {
+  margin: 0;
+  font-size: 14px;
+  color: #333;
+}
+
+/* Estilo para el nombre del usuario */
+.info-data p:first-child {
+  font-weight: bold;
+  font-size: 16px;
+  color: #222;
+}
+
+/* Estilo para el producto restante */
+.info-data p:last-child {
+  color: #777;
+  font-style: italic;
+}
+
+/* Responsividad */
+@media (max-width: 480px) {
+  .user-container {
+      right: 10px;
+      bottom: 10px;
+      max-width: 260px;
+      padding: 12px;
+  }
+
+  .user-logo {
+      width: 45px;
+      height: 45px;
+  }
+
+  .info-data p {
+      font-size: 13px;
+  }
+}

@@ -1,0 +1,17 @@
+<!-- components/cart.component.html -->
+<h1>Carrito</h1>
+<div class="cart-container">
+    <h2>Carrito de Compras</h2>
+    <div *ngFor="let item of cartItems" class="cart-item">
+      <img [src]="item.product.image" alt="{{item.product.name}}" class="cart-item-image">
+      <div class="cart-item-details">
+        <p>{{item.product.name}}</p>
+        <p>{{item.product.tipo}}</p>
+        <p>Cantidad: {{item.quantity}}</p>
+        <button (click)="incrementQuantity(item)">+</button>
+        <button (click)="decrementQuantity(item)">-</button>
+        <button (click)="removeItem(item.product.name)">Eliminar</button>
+      </div>
+    </div>
+    <button (click)="clearCart()">Vaciar Carrito</button>
+  </div>

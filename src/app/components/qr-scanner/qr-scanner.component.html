@@ -1,0 +1,20 @@
+<div
+  class="container d-flex flex-column justify-content-center align-items-center"
+>
+  <h2>Escanear Código QR</h2>
+
+  <!-- QR Scanner -->
+  <zxing-scanner
+    [formats]="allowedFormats"
+    (scanSuccess)="onScanSuccess($event)"
+    class="border border-primary rounded p-3 my-3"
+  ></zxing-scanner>
+
+   <!-- Scanned Result -->
+   <p *ngIf="scannedResult" class="text-success mt-2">Código escaneado: {{ scannedResult }}</p>
+
+  <!-- Buttons -->
+  <div class="d-flex gap-3">
+    <button class="btn btn-danger" (click)="cancel()">Cancelar</button>
+  </div>
+</div>
