@@ -1,45 +1,55 @@
-  <!-- components/cart.component.html -->
-  <div class="user-container">
-    <img src="/Img_Users1.png" class="user-logo">
-    <div class="info-data" *ngIf="user">
-      <p>{{user.name}}</p>
-      <p>3 "E2"</p>  <!-- Cambiar-->
-      <p>Retiros Disponibles: {{user.productos_restantes}}</p>
-    </div>
+<!-- components/cart.component.html -->
+<div class="user-container">
+  <img src="/Img_Users1.png" class="user-logo">
+  <div class="info-data" *ngIf="user">
+    <p>{{user.name}}</p>
+    <p>3 "E2"</p>  <!-- Cambiar-->
+    <p>Retiros Disponibles: {{user.productos_restantes}}</p>
+  </div>
 </div>
 
 
-  <h1>Carrito</h1>
-  <div class="cart-container">
-      <div *ngFor="let item of cartItems" class="cart-item">
-        <img [src]="item.product.image" alt="{{item.product.name}}" class="cart-item-image">
-        <div class="cart-item-details">
-          <p>{{item.product.name}}</p>
-          <p>{{item.product.tipo}}</p>
-          <p>Cantidad: {{item.quantity}}</p>
-          <button (click)="incrementQuantity(item)">+</button>
-          <button (click)="decrementQuantity(item)">-</button>
-          <button (click)="removeItem(item.product.name)">Eliminar</button>
-        </div>
+<h1>Carrito</h1>
+<div class="cart-container">
+    <div *ngFor="let item of cartItems" class="cart-item">
+      <img [src]="item.product.image" alt="{{item.product.name}}" class="cart-item-image">
+      <div class="cart-item-details">
+        <p>{{item.product.name}}</p>
+        <p>{{item.product.tipo}}</p>
+        <p>Cantidad: {{item.quantity}}</p>
+        <button (click)="incrementQuantity(item)">+</button>
+        <button (click)="decrementQuantity(item)">-</button>
+        <button (click)="removeItem(item.product.name)">Eliminar</button>
       </div>
-  </div>
-  <button (click)="clearCart()">Vaciar Carrito</button>
+    </div>
+</div>
+<button (click)="clearCart()">Vaciar Carrito</button>
 
-  <div class="container">
-    <div class="item-produc" *ngFor="let item of productos">
-      <div class="productos">
-        <img src="{{item.image}}" alt="" class="imagenesLeches">
-        <div class="data">
-          <p>{{item.name}}</p>
-          <p>{{item.tipo}}</p>
-          <button (click)="addToCart(item)">Agregar al Carrito</button>
-        </div>
+<div class="container">
+  <div class="item-produc" *ngFor="let item of productos">
+    <div class="productos">
+      <img src="{{item.image}}" alt="" class="imagenesLeches">
+      <div class="data">
+        <p>{{item.name}}</p>
+        <p>{{item.tipo}}</p>
+        <button (click)="addToCart(item)">Agregar al Carrito</button>
       </div>
     </div>
   </div>
+</div>
 
-  <div class="botones-conf">
-    <button (click)="retirarCompra()">Retirar</button>
-    <button (click)="cancel()">Cancelar</button>
+<div class="botones-conf">
+  <button [disabled]="isProcessing" (click)="retirarCompra()">
+    <span *ngIf="!isProcessing">Retirar</span>
+    <span *ngIf="isProcessing">Procesando...</span>
+  </button>
+  <button (click)="cancel()">Cancelar</button>
+</div>
 
+<!-- Overlay que aparece cuando se está procesando -->
+<div *ngIf="isProcessing" class="processing-overlay">
+  <div class="processing-content">
+    <p>Preparando tus productos...</p>
+    <div class="spinner"></div>
   </div>
+</div>

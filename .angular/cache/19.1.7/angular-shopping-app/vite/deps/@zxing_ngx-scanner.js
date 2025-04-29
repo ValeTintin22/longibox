@@ -1,4 +1,37 @@
 import {
+  FormsModule
+} from "./chunk-N46EYRWE.js";
+import {
+  CommonModule
+} from "./chunk-ZG5QIA4M.js";
+import {
+  ChangeDetectionStrategy,
+  Component,
+  EventEmitter,
+  Input,
+  NgModule,
+  Output,
+  ViewChild,
+  setClassMetadata,
+  ɵɵdefineComponent,
+  ɵɵdefineInjector,
+  ɵɵdefineNgModule,
+  ɵɵelementEnd,
+  ɵɵelementStart,
+  ɵɵloadQuery,
+  ɵɵproperty,
+  ɵɵqueryRefresh,
+  ɵɵsanitizeUrl,
+  ɵɵstyleProp,
+  ɵɵtext,
+  ɵɵviewQuery
+} from "./chunk-WO4QKMEN.js";
+import "./chunk-Q7BYFCBH.js";
+import "./chunk-VBJ2TNSI.js";
+import {
+  BehaviorSubject
+} from "./chunk-XEOIO3ZY.js";
+import {
   ArgumentException_default,
   AztecReader_default,
   BarcodeFormat_default,
@@ -21,37 +54,6 @@ import {
   PDF417Reader_default,
   QRCodeReader_default
 } from "./chunk-ICV4TB7J.js";
-import {
-  FormsModule
-} from "./chunk-YXJACFMV.js";
-import {
-  CommonModule
-} from "./chunk-CJNZJ475.js";
-import {
-  ChangeDetectionStrategy,
-  Component,
-  EventEmitter,
-  Input,
-  NgModule,
-  Output,
-  ViewChild,
-  setClassMetadata,
-  ɵɵdefineComponent,
-  ɵɵdefineInjector,
-  ɵɵdefineNgModule,
-  ɵɵelementEnd,
-  ɵɵelementStart,
-  ɵɵloadQuery,
-  ɵɵproperty,
-  ɵɵqueryRefresh,
-  ɵɵsanitizeUrl,
-  ɵɵstyleProp,
-  ɵɵtext,
-  ɵɵviewQuery
-} from "./chunk-NV4BDSOQ.js";
-import {
-  BehaviorSubject
-} from "./chunk-2QQLL3PY.js";
 import {
   __async,
   __spreadProps,
