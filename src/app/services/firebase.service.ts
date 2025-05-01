@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { Observable, throwError } from 'rxjs';
+import { catchError, tap } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -12,74 +12,50 @@ export class FirebaseService {
   constructor(private http: HttpClient) { }
 
   /**
-   * Actualiza el estado de los botones en Firebase para controlar los motores del ESP32
-   * @param motorIndexes - Índices de los motores a activar (1-6)
+   * Envía una solicitud de productos a Firebase para ser procesada por el ESP32
+   * @param products Array de productos con sus cantidades
    * @returns Observable con la respuesta de Firebase
    */
-  activateMotors(motorIndexes: number[]): Observable<any> {
-    // Objeto para almacenar el estado de los botones
-    const botones: Record<string, boolean> = {
-      boton1: false,
-      boton2: false,
-      boton3: false,
-      boton4: false,
-      boton5: false,
-      boton6: false
-    };
-    
-    // Activa los botones correspondientes a los motores seleccionados
-    motorIndexes.forEach(index => {
-      if (index >= 1 && index <= 6) {
-        botones[`boton${index}`] = true;
-      }
-    });
-
-    // Envía los datos a Firebase
-    return this.http.put(`${this.databaseUrl}/botones.json`, botones)
-      .pipe(
-        tap(response => console.log('Motores activados en Firebase:', response))
-      );
-  }
-
-  /**
-   * Resetea todos los botones a falso después de que el ESP32 haya procesado la solicitud
-   */
-  resetMotors(): Observable<any> {
-    const botones = {
-      boton1: false,
-      boton2: false,
-      boton3: false,
-      boton4: false,
-      boton5: false,
-      boton6: false
-    };
-    
-    return this.http.put(`${this.databaseUrl}/botones.json`, botones)
-      .pipe(
-        tap(response => console.log('Motores reseteados en Firebase:', response))
-      );
-  }
-
-  /**
-   * Obtiene el estado actual de los botones desde Firebase
-   */
-  getMotorStatus(): Observable<any> {
-    return this.http.get(`${this.databaseUrl}/botones.json`)
-      .pipe(
-        tap(response => console.log('Estado actual de los motores:', response))
-      );
-  }
-
-  activateProductRequests(products: { productId: number, quantity: number }[]): Observable<any> {
-    // Enviar los productos solicitados a Firebase
-    return this.http.put(`${this.databaseUrl}/solicitudes.json`, { 
+  createProductRequest(products: { productId: number, quantity: number }[]): Observable<any> {
+    // Crear el objeto de solicitud
+    const request = { 
       productos: products,
-      estado: 'pendiente', // Para que el ESP32 sepa que hay una nueva solicitud
+      estado: 'pendiente',
       timestamp: new Date().getTime()
-    }).pipe(
-      tap(response => console.log('Solicitud enviada a Firebase:', response))
+    };
+
+    // Enviar la solicitud a Firebase
+    return this.http.put(`${this.databaseUrl}/solicitudes.json`, request).pipe(
+      tap(response => console.log('Solicitud enviada a Firebase:', response)),
+      catchError(this.handleError)
     );
   }
 
-  
+  /**
+   * Consulta el estado de una solicitud en Firebase
+   * @returns Observable con el estado actual de la solicitud
+   */
+  getRequestStatus(): Observable<any> {
+    return this.http.get(`${this.databaseUrl}/solicitudes.json`).pipe(
+      catchError(this.handleError)
+    );
+  }
+
+  /**
+   * Maneja errores de las solicitudes HTTP
+   */
+  private handleError(error: HttpErrorResponse) {
+    let errorMessage = 'Ocurrió un error de comunicación';
+    
+    if (error.error instanceof ErrorEvent) {
+      // Error del lado del cliente
+      errorMessage = `Error: ${error.error.message}`;
+    } else {
+      // Error del lado del servidor
+      errorMessage = `Código: ${error.status}, mensaje: ${error.message}`;
+    }
+    
+    console.error(errorMessage);
+    return throwError(() => new Error(errorMessage));
+  }
 }
