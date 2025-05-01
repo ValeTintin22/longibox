@@ -1,5 +1,5 @@
-import { Component, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { Router } from '@angular/router';
+import { Component, CUSTOM_ELEMENTS_SCHEMA, input, output } from '@angular/core';
+import { Router, RouterOutlet } from '@angular/router';
 import { DataServiceService } from '../../services/data-service.service';
 import { ComprasService } from '../../services/compras.service';
 import { ProductService } from '../../services/product.service';
@@ -25,6 +25,8 @@ import { finalize } from 'rxjs/operators';
 export class ProductListComponent {
   id_users = 0;
   productos: Product[] = [];
+  selectedIndex = 0;
+  i = 0;
   cartItems: Cart[] = [];
   user!: User;
   isProcessing = false;
@@ -43,9 +45,25 @@ export class ProductListComponent {
     this.dataService.datoActual.subscribe(dato => {
       this.id_users = dato;
     });
-    this.loadProducts();
+    this.getCarrito();
     this.loadUsersId();
     this.cartItems = this.cartService.getCartItems();
+  }
+
+  slideLeft(sliderId: string) {
+    console.log("left" + sliderId)
+    const slider = document.getElementById(sliderId) as HTMLElement | null;
+    if (slider) {
+      slider.scrollLeft -= 500;
+    }
+  }
+
+  slideRight(sliderId: string) {
+    console.log("right" + sliderId)
+    const slider = document.getElementById(sliderId) as HTMLElement | null;
+    if (slider) {
+      slider.scrollLeft += 500;
+    }
   }
 
   retirarCompra() {
@@ -73,12 +91,8 @@ export class ProductListComponent {
     this.activateMotorsService.requestProducts(this.cartItems)
       .pipe(
         finalize(() => {
-          setTimeout(() => {
-            // Se ejecutará cuando termine, con éxito o error
-            if (this.isProcessing) {
-              this.isProcessing = false;
-            }
-          }, 5000); // Tiempo de espera para asegurar que no quede atorado
+          // Se ejecutará cuando termine, con éxito o error
+          this.isProcessing = false;
         })
       )
       .subscribe({
@@ -94,27 +108,19 @@ export class ProductListComponent {
             error: (err) => {
               console.error('Error al actualizar datos:', err);
               alert('Error: Superaste la cantidad de retiros que tienes');
-              this.isProcessing = false;
             }
           });
         },
         error: (err) => {
           console.error('Error al enviar solicitud:', err);
           alert('Error al comunicarse con el dispensador. Por favor, intente nuevamente.');
-          this.isProcessing = false;
         }
       });
   }
 
   loadUsersId() {
-    this.serviceUser.getUserById(this.id_users).subscribe({
-      next: (data) => {
-        this.user = data;
-      },
-      error: (err) => {
-        console.error('Error al cargar usuario:', err);
-        alert('Error al cargar datos del usuario');
-      }
+    this.serviceUser.getUserById(this.id_users).subscribe((data) => {
+      this.user = data;
     });
   }
 
@@ -122,6 +128,7 @@ export class ProductListComponent {
     this.serviceCompras.createCompras(this.id_users).subscribe({
       next: (response) => {
         console.log('Compra registrada:', response);
+        console.log(response.id);
 
         // Registrar los detalles de la compra
         let detallesRegistrados = 0;
@@ -141,12 +148,10 @@ export class ProductListComponent {
                 alert('Retiro Exitoso. Por favor retire sus productos del dispensador.');
                 this.clearCart();
                 this.router.navigate(['/invalid-user']);
-                this.isProcessing = false;
               }
             },
             error: (err) => {
               console.error('Error al registrar detalle:', err);
-              // Continuar con los siguientes detalles aunque alguno falle
             }
           });
         }
@@ -154,7 +159,6 @@ export class ProductListComponent {
       error: (err) => {
         console.error('Error al crear compra:', err);
         alert('Error al registrar la compra');
-        this.isProcessing = false;
       }
     });
   }
@@ -164,35 +168,34 @@ export class ProductListComponent {
   }
 
   cancel() {
-    if (this.isProcessing) {
-      return; // Evitar cancelar durante proceso
-    }
     this.router.navigate(['']);
   }
 
-  loadProducts() {
+  getCarrito() {
     this.serviceProducto.getProduct().subscribe({
       next: (response) => {
-        console.log('Productos cargados:', response);
+        console.log('Productos:', response);
         this.productos = response;
       },
       error: (err) => {
-        console.error('Error al cargar productos:', err);
-        alert('Error al cargar los productos disponibles');
+        console.error('Error:', err);
       }
-    });
+    })
   }
 
   clearCart(): void {
     this.cartService.clearCart();
     this.cartItems = [];
-    console.log('Carrito limpiado');
+    console.log('Carrito limpiado:', this.cartItems);
+    console.log('Productos disponibles:', this.productos);
   }
 
+
   addToCart(item: Product) {
+    console.log('Agregando al carrito:', item);
     this.cartService.addToCart(item);
     this.cartItems = this.cartService.getCartItems();
-    console.log('Producto agregado al carrito:', item.name);
+    console.log('Carrito actual:', this.cartItems);
   }
 
   incrementQuantity(item: Cart): void {
@@ -203,7 +206,8 @@ export class ProductListComponent {
     if (item.quantity > 1) {
       item.quantity -= 1;
     } else {
-      this.removeItem(item.product.name);
+      this.cartService.removeFromCart(item.product.name);
+      this.cartItems = this.cartService.getCartItems();
     }
   }
 
